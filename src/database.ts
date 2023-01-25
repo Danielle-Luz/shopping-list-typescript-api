@@ -1,1 +1,1 @@
-let shoppingList = [];
+export let database = [];
