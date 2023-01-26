@@ -8,3 +8,5 @@ export interface iShoppingList {
     listName: string;
     data: iShoppingItem[];
 }
+
+export type tShoppingListKeys = "id" | "listName" | "data";
