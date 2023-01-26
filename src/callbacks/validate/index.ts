@@ -1,29 +1,29 @@
-import { iShoppingList, tShoppingListKeys } from "../../interfaces";
+import { iPurchaseList, tPurchaseListKeys } from "../../interfaces";
 
 const validateRequestListKeys = (
-  idealShoppingListKeys: tShoppingListKeys[],
+  idealPurchaseListKeys: tPurchaseListKeys[],
   requestListKeys: string[]
 ) => {
-  const hasidealShoppingListKeys = idealShoppingListKeys.every((key) => {
+  const hasidealPurchaseListKeys = idealPurchaseListKeys.every((key) => {
     const hasShoppingKey = requestListKeys.includes(key);
     const hasSameLength =
-      requestListKeys.length === idealShoppingListKeys.length;
+      requestListKeys.length === idealPurchaseListKeys.length;
 
     return hasShoppingKey && hasSameLength;
   });
 
-  return hasidealShoppingListKeys;
+  return hasidealPurchaseListKeys;
 };
 
 const validateRequestListPropertiesTypes = (
-  idealShoppingListKeys: tShoppingListKeys[],
-  idealShoppingList: iShoppingList,
+  idealPurchaseListKeys: tPurchaseListKeys[],
+  idealPurchaseList: iPurchaseList,
   requestList: any
 ): [boolean, string[]] => {
   const propertiesTypes: string[] = [];
 
-  const hasSameTypes = idealShoppingListKeys.every((key) => {
-    const propertyConstructor = idealShoppingList[key].constructor;
+  const hasSameTypes = idealPurchaseListKeys.every((key) => {
+    const propertyConstructor = idealPurchaseList[key].constructor;
 
     propertiesTypes.push(propertyConstructor.toString().toLowerCase());
 
@@ -34,25 +34,25 @@ const validateRequestListPropertiesTypes = (
 };
 
 export const validateRequestList = (requestList: any) => {
-  const idealShoppingList: iShoppingList = {
+  const idealPurchaseList: iPurchaseList = {
     id: 0,
     listName: "",
     data: [],
   };
-  const idealShoppingListKeys: tShoppingListKeys[] = Object.keys(
-    idealShoppingList
-  ) as tShoppingListKeys[];
+  const idealPurchaseListKeys: tPurchaseListKeys[] = Object.keys(
+    idealPurchaseList
+  ) as tPurchaseListKeys[];
   const requestListKeys = Object.keys(requestList);
 
-  const hasidealShoppingListKeys = validateRequestListKeys(
-    idealShoppingListKeys,
+  const hasidealPurchaseListKeys = validateRequestListKeys(
+    idealPurchaseListKeys,
     requestListKeys
   );
 
-  if (hasidealShoppingListKeys) {
+  if (hasidealPurchaseListKeys) {
     const [hasSameTypes, propertiesTypes] = validateRequestListPropertiesTypes(
-      idealShoppingListKeys,
-      idealShoppingList,
+      idealPurchaseListKeys,
+      idealPurchaseList,
       requestList
     );
 
@@ -64,7 +64,7 @@ export const validateRequestList = (requestList: any) => {
       );
   } else {
     throw new Error(
-      `O corpo da requisição deve ter as seguintes propriedades: ${idealShoppingListKeys.join(
+      `O corpo da requisição deve ter as seguintes propriedades: ${idealPurchaseListKeys.join(
         ", "
       )}`
     );

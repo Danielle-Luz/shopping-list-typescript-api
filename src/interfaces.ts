@@ -1,16 +1,16 @@
 export interface iShoppingItem {
-    name: string;
-    quantity: number;
+  name: string;
+  quantity: number;
 }
 
-export interface iShoppingList {
-    id: number;
-    listName: string;
-    data: iShoppingItem[];
+export interface iPurchaseList {
+  id: number;
+  listName: string;
+  data: iShoppingItem[];
 }
 
 export interface iMessage {
-    message: string;
+  message: string;
 }
 
-export type tShoppingListKeys = "id" | "listName" | "data";
+export type tPurchaseListKeys = "id" | "listName" | "data";
