@@ -31,7 +31,7 @@ export const getAllLists = (request: Request, response: Response) => {
 };
 
 export const getListById = (request: Request, response: Response) => {
-  const searchedListId = parseInt(request.params["purchaseListId"]);
+  const searchedListId = Number(request.params["purchaseListId"]);
   try {
     if (isNaN(searchedListId) || searchedListId % 1 !== 0)
       throw new Error("O id deve ser um número inteiro");
@@ -40,7 +40,9 @@ export const getListById = (request: Request, response: Response) => {
       ({ id: listId }) => listId === searchedListId
     );
 
-    return response.status(200).send(foundList || {});
+    if (!foundList) throw new Error("Nenhuma lista possui o id especificado");
+
+    return response.status(200).send(foundList);
   } catch (error) {
     const errorObject = error as Error;
 
