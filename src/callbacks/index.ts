@@ -9,7 +9,10 @@ export const createList = (request: Request, response: Response) => {
   try {
     validateRequestList(listData);
 
-    database.push(listData);
+    const nextId = listData[listData.length - 1].id + 1;
+    const newListItem = {id: nextId, ...listData}
+
+    database.push(newListItem);
 
     const sucessMessage: iMessage = { message: "Lista inserida com sucesso." };
 
