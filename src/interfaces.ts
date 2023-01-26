@@ -13,4 +13,4 @@ export interface iMessage {
   message: string;
 }
 
-export type tPurchaseListKeys = "id" | "listName" | "data";
+export type tPurchaseListKeys = "listName" | "data";

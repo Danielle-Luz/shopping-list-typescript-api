@@ -17,7 +17,7 @@ const validateRequestListKeys = (
 
 const validateRequestListPropertiesTypes = (
   idealPurchaseListKeys: tPurchaseListKeys[],
-  idealPurchaseList: iPurchaseList,
+  idealPurchaseList: Omit<iPurchaseList, "id">,
   requestList: any
 ): [boolean, string[]] => {
   const propertiesTypes: string[] = [];
@@ -34,8 +34,7 @@ const validateRequestListPropertiesTypes = (
 };
 
 export const validateRequestList = (requestList: any) => {
-  const idealPurchaseList: iPurchaseList = {
-    id: 0,
+  const idealPurchaseList: Omit<iPurchaseList, "id"> = {
     listName: "",
     data: [],
   };
