@@ -16,7 +16,7 @@ export const createList = (request: Request, response: Response) => {
 
     const sucessMessage: iMessage = { message: "Lista inserida com sucesso." };
 
-    return response.status(201).send(database);
+    return response.status(201).send(sucessMessage);
   } catch (error) {
     const errorObject = error as Error;
 
