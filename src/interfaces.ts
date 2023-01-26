@@ -9,4 +9,8 @@ export interface iShoppingList {
     data: iShoppingItem[];
 }
 
+export interface iMessage {
+    message: string;
+}
+
 export type tShoppingListKeys = "id" | "listName" | "data";

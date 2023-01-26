@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { database } from "./database";
-import { iShoppingList, tShoppingListKeys } from "./interfaces";
+import { iMessage, iShoppingList, tShoppingListKeys } from "./interfaces";
 
 const validateRequestListKeys = (
   idealShoppingListKeys: tShoppingListKeys[],
@@ -74,19 +74,21 @@ const validateRequestList = (requestList: any) => {
 };
 
 export const createList = (request: Request, response: Response) => {
-    const listData = request.body;
+  const listData = request.body;
 
-    try {
-        const listDataIsValid = validateRequestList(listData);
+  try {
+    const listDataIsValid = validateRequestList(listData);
 
-        database.push(listData);
+    database.push(listData);
 
-        return response.status(201).send();
-    } catch (error) {
-        const errorObject = error as Error;
+    const sucessMessage: iMessage = { message: "Lista inserida com sucesso." };
 
-        return response.status(400).send();
-    }
+    return response.status(201).send();
+  } catch (error) {
+    const errorObject = error as Error;
 
-    
+    const errorMessage: iMessage = { message: errorObject.message };
+
+    return response.status(400).send(errorMessage);
+  }
 };
