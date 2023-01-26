@@ -21,13 +21,15 @@ const validateRequestListPropertiesTypes = (
   requestList: any
 ): [boolean, string[]] => {
   const propertiesTypes: string[] = [];
+  let hasSameTypes = true;
 
-  const hasSameTypes = idealPurchaseListKeys.every((key) => {
+  idealPurchaseListKeys.forEach((key) => {
     const propertyConstructor = idealPurchaseList[key].constructor;
 
-    propertiesTypes.push(propertyConstructor.toString().toLowerCase());
+    propertiesTypes.push(propertyConstructor.name.toLowerCase());
 
-    return propertyConstructor === requestList[key].constructor;
+    if (propertyConstructor !== requestList[key].constructor)
+      hasSameTypes = false;
   });
 
   return [hasSameTypes, propertiesTypes];
