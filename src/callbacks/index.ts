@@ -33,8 +33,12 @@ export const getAllLists = (request: Request, response: Response) => {
 export const getListById = (request: Request, response: Response) => {
   const searchedListId = Number(request.params["purchaseListId"]);
   try {
-    if (isNaN(searchedListId) || searchedListId % 1 !== 0)
-      throw new Error("O id deve ser um número inteiro");
+    const idIsNotANumber = isNaN(searchedListId);
+    const idIsDecimal = searchedListId % 1 !== 0;
+    const idIsNegative = searchedListId <= 0;
+
+    if (idIsNotANumber || idIsDecimal || idIsNegative)
+      throw new Error("O id deve ser um número inteiro positivo");
 
     const foundList = database.find(
       ({ id: listId }) => listId === searchedListId
