@@ -9,14 +9,14 @@ export const createList = (request: Request, response: Response) => {
   try {
     validateRequestList(listData);
 
-    const nextId = listData[listData.length - 1].id + 1;
+    const nextId = database[database.length - 1]?.id + 1 || 1;
     const newListItem = {id: nextId, ...listData}
 
     database.push(newListItem);
 
     const sucessMessage: iMessage = { message: "Lista inserida com sucesso." };
 
-    return response.status(201).send(sucessMessage);
+    return response.status(201).send(database);
   } catch (error) {
     const errorObject = error as Error;
 
