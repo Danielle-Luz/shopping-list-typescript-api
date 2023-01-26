@@ -1,7 +1,8 @@
 import { Request, Response } from "express";
+import { database } from "./database";
 import { iShoppingList, tShoppingListKeys } from "./interfaces";
 
-const validateListKeys = (
+const validateRequestListKeys = (
   idealShoppingListKeys: tShoppingListKeys[],
   requestListKeys: string[]
 ) => {
@@ -16,7 +17,7 @@ const validateListKeys = (
   return hasidealShoppingListKeys;
 };
 
-const validateListPropertiesTypes = (
+const validateRequestListPropertiesTypes = (
   idealShoppingListKeys: tShoppingListKeys[],
   idealShoppingList: iShoppingList,
   requestList: any
@@ -45,13 +46,13 @@ const validateRequestList = (requestList: any) => {
   ) as tShoppingListKeys[];
   const requestListKeys = Object.keys(requestList);
 
-  const hasidealShoppingListKeys = validateListKeys(
+  const hasidealShoppingListKeys = validateRequestListKeys(
     idealShoppingListKeys,
     requestListKeys
   );
 
   if (hasidealShoppingListKeys) {
-    const [hasSameTypes, propertiesTypes] = validateListPropertiesTypes(
+    const [hasSameTypes, propertiesTypes] = validateRequestListPropertiesTypes(
       idealShoppingListKeys,
       idealShoppingList,
       requestList
@@ -72,4 +73,20 @@ const validateRequestList = (requestList: any) => {
   }
 };
 
-export const createList = (request: Request, response: Response) => {};
+export const createList = (request: Request, response: Response) => {
+    const listData = request.body;
+
+    try {
+        const listDataIsValid = validateRequestList(listData);
+
+        database.push(listData);
+
+        return response.status(201).send();
+    } catch (error) {
+        const errorObject = error as Error;
+
+        return response.status(400).send();
+    }
+
+    
+};

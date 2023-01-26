@@ -1,1 +1,1 @@
-export let database = [];
+export let database: any[] = [];
