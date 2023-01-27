@@ -32,8 +32,12 @@ export namespace Middlewares {
   ) => {
     const searchedListId = Number(request.params["purchaseListId"]);
 
+    let foundListIndex = 0;
     const foundList = database.find(
-      ({ id: listId }) => listId === searchedListId
+      ({ id: listId }, index) => {
+        foundListIndex = index;
+        return listId === searchedListId
+      }
     );
 
     if (!foundList) {
@@ -45,6 +49,7 @@ export namespace Middlewares {
     }
 
     request.foundList = foundList;
+    request.foundListIndex = foundListIndex;
     return next();
   };
 

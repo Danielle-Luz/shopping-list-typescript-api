@@ -1,6 +1,7 @@
 import { Middlewares } from "./callbacks/Middlewares";
 import {
   createList,
+  deleteListItem,
   getAllLists,
   getListById,
 } from "./callbacks/requests/index";
@@ -16,6 +17,6 @@ api.post("/purchaseList", Middlewares.RequestKeys.validateRequestListKeys, Middl
 api.get("/purchaseList", getAllLists);
 api.get("/purchaseList/:purchaseListId", getListById);
 
-api.delete("/purchaseList/:purchaseListId/:itemName");
+api.delete("/purchaseList/:purchaseListId/:itemName", deleteListItem);
 
 api.listen(3000, () => console.log("API is running"));
