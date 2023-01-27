@@ -103,12 +103,24 @@ export namespace Middlewares {
       const { body } = request;
       const requestKeys = Object.keys(body);
 
-      const hasidealRequestKeys = idealRequestKeys.every((key) => {
-        const hasIdealRequestKeys = requestKeys.includes(key);
-        const hasSameLength = requestKeys.length === idealRequestKeys.length;
+      let hasidealRequestKeys: boolean;
 
-        return hasIdealRequestKeys && hasSameLength;
-      });
+      if (request.method !== "PATCH") {
+        hasidealRequestKeys = idealRequestKeys.every((key) => {
+          const hasIdealRequestKeys = requestKeys.includes(key);
+          const hasSameLength = requestKeys.length === idealRequestKeys.length;
+
+          return hasIdealRequestKeys && hasSameLength;
+        });
+      } else {
+        hasidealRequestKeys = requestKeys.every((key) => {
+          const hasIdealRequestKeys = idealRequestKeys.includes(key);
+          const hasSmallerLength =
+            requestKeys.length <= idealRequestKeys.length;
+
+          return hasIdealRequestKeys && hasSmallerLength;
+        });
+      }
 
       if (!hasidealRequestKeys) {
         const errorMessage: iMessage = {
@@ -163,7 +175,7 @@ export namespace Middlewares {
         const propertyConstructor = idealRequestObject[key].constructor;
         const rightType = propertyConstructor.name.toLowerCase();
 
-        if (propertyConstructor !== body[key].constructor) {
+        if (body[key] && propertyConstructor !== body[key].constructor) {
           const errorMessage: iMessage = {
             message: `A propriedade '${key}' deve ser do seguinte tipo: ${rightType}`,
           };
