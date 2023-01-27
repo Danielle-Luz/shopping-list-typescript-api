@@ -71,3 +71,12 @@ export const validateRequestList = (requestList: any) => {
     );
   }
 };
+
+export const validateId = (id: any) => {
+    const idIsNotANumber = isNaN(id);
+    const idIsDecimal = id % 1 !== 0;
+    const idIsNegative = id <= 0;
+
+    if (idIsNotANumber || idIsDecimal || idIsNegative)
+      throw new Error("O id deve ser um número inteiro positivo");
+}
