@@ -1,9 +1,14 @@
 import { iPurchaseList, tPurchaseListKeys } from "../../interfaces";
 
-const validateRequestListKeys = (
-  idealPurchaseListKeys: tPurchaseListKeys[],
-  requestListKeys: string[]
-) => {
+const validateRequestListKeys = () => {
+  const idealPurchaseList: Omit<iPurchaseList, "id"> = {
+    listName: "",
+    data: [],
+  };
+  const idealPurchaseListKeys: tPurchaseListKeys[] = Object.keys(
+    idealPurchaseList
+  ) as tPurchaseListKeys[];
+  const requestListKeys = Object.keys(requestList);
   const hasidealPurchaseListKeys = idealPurchaseListKeys.every((key) => {
     const hasShoppingKey = requestListKeys.includes(key);
     const hasSameLength =

@@ -1,4 +1,4 @@
-import { iMessage } from "../../interfaces";
+import { iMessage, iPurchaseList, tPurchaseListKeys } from "../../interfaces";
 import { NextFunction, Request, Response } from "express";
 import { database } from "../../database";
 
@@ -45,5 +45,40 @@ export namespace Middlewares {
     }
 
     return next();
+  };
+
+  const validateRequestListKeys = (
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ) => {
+    const requestList = request.body;
+
+    const idealPurchaseList: Omit<iPurchaseList, "id"> = {
+      listName: "",
+      data: [],
+    };
+
+    const idealPurchaseListKeys: tPurchaseListKeys[] = Object.keys(
+      idealPurchaseList
+    ) as tPurchaseListKeys[];
+    const requestListKeys = Object.keys(requestList);
+
+    const hasidealPurchaseListKeys = idealPurchaseListKeys.every((key) => {
+      const hasShoppingKey = requestListKeys.includes(key);
+      const hasSameLength =
+        requestListKeys.length === idealPurchaseListKeys.length;
+
+      return hasShoppingKey && hasSameLength;
+    });
+
+    if (!hasidealPurchaseListKeys) {
+      const errorMessage: iMessage = {
+        message: `O corpo da requisição deve ter as seguintes propriedades: ${idealPurchaseListKeys.join(
+          ", "
+        )}`,
+      };
+      return response.status(400).send(errorMessage);
+    }
   };
 }
