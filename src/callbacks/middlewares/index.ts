@@ -44,6 +44,7 @@ export namespace Middlewares {
       return response.status(404).send(errorMessage);
     }
 
+    request.foundList = foundList;
     return next();
   };
 

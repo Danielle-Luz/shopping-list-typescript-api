@@ -5,22 +5,14 @@ import { iMessage } from "../../interfaces";
 export const createList = (request: Request, response: Response) => {
   const listData = request.body;
 
-  try {
-    const nextId = database[database.length - 1]?.id + 1 || 1;
-    const newListItem = { id: nextId, ...listData };
+  const nextId = database[database.length - 1]?.id + 1 || 1;
+  const newListItem = { id: nextId, ...listData };
 
-    database.push(newListItem);
+  database.push(newListItem);
 
-    const sucessMessage: iMessage = { message: "Lista inserida com sucesso." };
+  const sucessMessage: iMessage = { message: "Lista inserida com sucesso." };
 
-    return response.status(201).send(sucessMessage);
-  } catch (error) {
-    const errorObject = error as Error;
-
-    const errorMessage: iMessage = { message: errorObject.message };
-
-    return response.status(400).send(errorMessage);
-  }
+  return response.status(201).send(sucessMessage);
 };
 
 export const getAllLists = (request: Request, response: Response) => {
@@ -36,6 +28,5 @@ export const deleteListItem = (request: Request, response: Response) => {
   const itemName = request.params["itemName"];
 
   try {
-    
   } catch (error) {}
 };
