@@ -55,3 +55,8 @@ export const getListById = (request: Request, response: Response) => {
     return response.status(404).send(errorMessage);
   }
 };
+
+export const deleteListItem = (request: Request, response: Response) => {
+    const purchaseListId = Number(request.params["purchaseListId"]);
+    const itemName = request.params["itemName"];
+}
