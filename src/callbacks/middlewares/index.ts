@@ -155,24 +155,23 @@ export namespace Middlewares {
     ) => {
       const { body } = request;
 
-      const propertiesTypes: string[] = [];
-      let hasSameTypes = true;
+      const errorMessages: iMessage[] = [];
 
       idealRequestKeys.forEach((key) => {
         const propertyConstructor = idealRequestObject[key].constructor;
+        const rightType = propertyConstructor.name.toLowerCase();
 
-        propertiesTypes.push(propertyConstructor.name.toLowerCase());
+        if (propertyConstructor !== body[key].constructor) {
+          const errorMessage: iMessage = {
+            message: `A propriedade '${key}' deve ser do seguinte tipo: ${rightType}`,
+          };
 
-        if (propertyConstructor !== body[key].constructor) hasSameTypes = false;
+          errorMessages.push(errorMessage);
+        }
       });
 
-      if (!hasSameTypes) {
-        const errorMessage: iMessage = {
-          message: `As propriedades no corpo da requisição devem ter os seguintes tipos respectivamente: ${propertiesTypes.join(
-            ", "
-          )}`,
-        };
-        return response.status(400).send(errorMessage);
+      if (errorMessages.length > 0) {
+        return response.status(400).send(errorMessages);
       }
 
       return next();
