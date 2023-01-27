@@ -19,21 +19,27 @@ export const createList = (request: Request, response: Response) => {
 export const createListItem = (request: Request, response: Response) => {
   const newPurchaseListItemData = request.body;
   const foundList = request.foundList;
-  const foundListIndex = request.foundListIndex;
 
-  const foundPurchaseListItem = foundList.data.find(({name}) => name == newPurchaseListItemData.name);
+  const foundPurchaseListItem = foundList.data.find(
+    ({ name }) => name == newPurchaseListItemData.name
+  );
+
+  let statusCode;
+  let message;
 
   if (foundPurchaseListItem) {
-    foundPurchaseListItem.quantity += 1;
+    message = "O item já foi inserido anteriormente na lista.";
+    statusCode = 202;
   } else {
+    message = "Item inserido na lista com sucesso.";
+    statusCode = 201;
+
     foundList.data.push(newPurchaseListItemData);
   }
 
-  //database[foundListIndex] = foundList;
+  const infoMessage: iMessage = { message: message };
 
-  const sucessMessage: iMessage = { message: "Item inserido na lista com sucesso." };
-
-  return response.status(201).send(sucessMessage);
+  return response.status(202).send(infoMessage);
 };
 
 export const getAllLists = (request: Request, response: Response) => {
