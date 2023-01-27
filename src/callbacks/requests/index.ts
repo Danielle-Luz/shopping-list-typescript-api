@@ -1,4 +1,4 @@
-import { iShoppingItem } from './../../interfaces';
+import { iShoppingItem } from "./../../interfaces";
 import { Request, Response } from "express";
 import { database } from "../../database";
 import { iMessage } from "../../interfaces";
@@ -26,18 +26,21 @@ export const getListById = (request: Request, response: Response) => {
 
 export const deleteListItem = (request: Request, response: Response) => {
   const itemName = request.params["itemName"];
-
   const foundList = request.foundList;
   const foundListIndex = request.foundListIndex;
+  
+  foundList.data = foundList.data.filter(
+    (shoppingItem: iShoppingItem) => shoppingItem.name !== itemName
+    );
+    database[foundListIndex] = foundList;
 
-  foundList.data = foundList.data.filter((shoppingItem: iShoppingItem) => shoppingItem.name !== itemName);
-  database[foundListIndex] = foundList;
-
-  const sucessMessage: iMessage = { message: "Item removido da lista com sucesso." };
-
-  return response.status(204).send(sucessMessage);
+  return response.status(204).send();
 };
 
 export const deleteList = (request: Request, response: Response) => {
-  
-}
+  const foundListIndex = request.foundListIndex;
+
+  database.splice(foundListIndex, 1);
+
+  return response.status(204).send();
+};

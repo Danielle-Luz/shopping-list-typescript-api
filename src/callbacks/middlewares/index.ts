@@ -1,3 +1,4 @@
+import { iShoppingItem } from "./../../interfaces";
 import { iMessage, iPurchaseList, tPurchaseListKeys } from "../../interfaces";
 import { NextFunction, Request, Response } from "express";
 import { database } from "../../database";
@@ -33,12 +34,10 @@ export namespace Middlewares {
     const searchedListId = Number(request.params["purchaseListId"]);
 
     let foundListIndex = 0;
-    const foundList = database.find(
-      ({ id: listId }, index) => {
-        foundListIndex = index;
-        return listId === searchedListId
-      }
-    );
+    const foundList = database.find(({ id: listId }, index) => {
+      foundListIndex = index;
+      return listId === searchedListId;
+    });
 
     if (!foundList) {
       const errorMessage: iMessage = {
@@ -50,6 +49,28 @@ export namespace Middlewares {
 
     request.foundList = foundList;
     request.foundListIndex = foundListIndex;
+    return next();
+  };
+
+  export const findListItem = (
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ) => {
+    const itemName = request.params["itemName"];
+    const foundList = request.foundList;
+
+    const foundListItem = foundList?.data?.find(
+      (shoppingItem: iShoppingItem) => shoppingItem.name === itemName
+    );
+
+    if (!foundListItem) {
+      const errorMessage: iMessage = {
+        message: "Nenhum item com o nome especificado foi encontrado",
+      };
+      return response.status(404).send(errorMessage);
+    }
+
     return next();
   };
 

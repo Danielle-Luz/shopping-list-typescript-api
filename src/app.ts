@@ -18,7 +18,7 @@ api.post("/purchaseList", Middlewares.RequestKeys.validateRequestListKeys, Middl
 api.get("/purchaseList", getAllLists);
 api.get("/purchaseList/:purchaseListId", getListById);
 
-api.delete("/purchaseList/:purchaseListId/:itemName", deleteListItem);
+api.delete("/purchaseList/:purchaseListId/:itemName", Middlewares.findListItem, deleteListItem);
 api.delete("/purchaseList/:purchaseListId", deleteList);
 
 api.listen(3000, () => console.log("API is running"));
