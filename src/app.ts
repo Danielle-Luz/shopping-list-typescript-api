@@ -9,8 +9,7 @@ const express = require("express");
 const api = express();
 
 api.use(express.json());
-api.use("/:purchaseListId", Middlewares.validateId);
-api.use("/:purchaseListId", Middlewares.findList);
+api.use("/purchaseList/:purchaseListId", [Middlewares.validateId, Middlewares.findList]);
 
 api.post("/purchaseList", Middlewares.RequestKeys.validateRequestListKeys, Middlewares.RequestKeys.validateRequestListPropertiesTypes, createList);
 
