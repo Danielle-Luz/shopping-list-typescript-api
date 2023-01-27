@@ -13,7 +13,8 @@ const api = express();
 api.use(express.json());
 api.use("/purchaseList/:purchaseListId", [Middlewares.validateId, Middlewares.findList]);
 
-api.post("/purchaseList", Middlewares.RequestKeys.validateRequestListKeys, Middlewares.RequestKeys.validateRequestListPropertiesTypes, createList);
+api.post("/purchaseList", Middlewares.RequestKeys.validatePurchaseListKeys, Middlewares.RequestKeys.validateRequestListPropertiesTypes, createList);
+api.post("/purchaseList/:purchaseListId");
 
 api.get("/purchaseList", getAllLists);
 api.get("/purchaseList/:purchaseListId", getListById);

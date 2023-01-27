@@ -1,4 +1,4 @@
-import { iShoppingItem } from "./../../interfaces";
+import { iPurchaseListItem } from "./../../interfaces";
 import { Request, Response } from "express";
 import { database } from "../../database";
 import { iMessage } from "../../interfaces";
@@ -28,11 +28,11 @@ export const deleteListItem = (request: Request, response: Response) => {
   const itemName = request.params["itemName"];
   const foundList = request.foundList;
   const foundListIndex = request.foundListIndex;
-  
+
   foundList.data = foundList.data.filter(
-    (shoppingItem: iShoppingItem) => shoppingItem.name !== itemName
-    );
-    database[foundListIndex] = foundList;
+    (purchaseListItem: iPurchaseListItem) => purchaseListItem.name !== itemName
+  );
+  database[foundListIndex] = foundList;
 
   return response.status(204).send();
 };

@@ -1,4 +1,4 @@
-import { iShoppingItem } from "./../../interfaces";
+import { iPurchaseListItem, tPurchaseListItemKeys } from "./../../interfaces";
 import { iMessage, iPurchaseList, tPurchaseListKeys } from "../../interfaces";
 import { NextFunction, Request, Response } from "express";
 import { database } from "../../database";
@@ -61,7 +61,8 @@ export namespace Middlewares {
     const foundList = request.foundList;
 
     const foundListItem = foundList?.data?.find(
-      (shoppingItem: iShoppingItem) => shoppingItem.name === itemName
+      (purchaseListItem: iPurchaseListItem) =>
+        purchaseListItem.name === itemName
     );
 
     if (!foundListItem) {
@@ -79,28 +80,35 @@ export namespace Middlewares {
       listName: "",
       data: [],
     };
+    const idealPurchaseListItem: iPurchaseListItem = {
+      name: "",
+      quantity: 0,
+    };
 
     const idealPurchaseListKeys: tPurchaseListKeys[] = Object.keys(
       idealPurchaseList
     ) as tPurchaseListKeys[];
+    const idealPurchaseListItemKeys: tPurchaseListItemKeys[] = Object.keys(
+      idealPurchaseListItem
+    ) as tPurchaseListItemKeys[];
 
-    export const validateRequestListKeys = (
+    const validateRequestKeys = (
       request: Request,
       response: Response,
+      idealRequestKeys: string[],
       next: NextFunction
     ) => {
-      const requestList = request.body;
-      const requestListKeys = Object.keys(requestList);
+      const { body } = request;
+      const requestKeys = Object.keys(body);
 
-      const hasidealPurchaseListKeys = idealPurchaseListKeys.every((key) => {
-        const hasShoppingKey = requestListKeys.includes(key);
-        const hasSameLength =
-          requestListKeys.length === idealPurchaseListKeys.length;
+      const hasidealRequestKeys = idealRequestKeys.every((key) => {
+        const hasIdealRequestKeys = requestKeys.includes(key);
+        const hasSameLength = requestKeys.length === idealRequestKeys.length;
 
-        return hasShoppingKey && hasSameLength;
+        return hasIdealRequestKeys && hasSameLength;
       });
 
-      if (!hasidealPurchaseListKeys) {
+      if (!hasidealRequestKeys) {
         const errorMessage: iMessage = {
           message: `O corpo da requisição deve ter as seguintes propriedades: ${idealPurchaseListKeys.join(
             ", "
@@ -110,6 +118,32 @@ export namespace Middlewares {
       }
 
       return next();
+    };
+
+    export const validatePurchaseListKeys = (
+      request: Request,
+      response: Response,
+      next: NextFunction
+    ) => {
+      return validateRequestKeys(
+        request,
+        response,
+        idealPurchaseListKeys,
+        next
+      );
+    };
+
+    export const validatePurchaseListItemKeys = (
+      request: Request,
+      response: Response,
+      next: NextFunction
+    ) => {
+      return validateRequestKeys(
+        request,
+        response,
+        idealPurchaseListItemKeys,
+        next
+      );
     };
 
     export const validateRequestListPropertiesTypes = (
