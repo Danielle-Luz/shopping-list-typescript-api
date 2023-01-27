@@ -35,5 +35,9 @@ export const deleteListItem = (request: Request, response: Response) => {
 
   const sucessMessage: iMessage = { message: "Item removido da lista com sucesso." };
 
-  return response.status(200).send(sucessMessage);
+  return response.status(204).send(sucessMessage);
 };
+
+export const deleteList = (request: Request, response: Response) => {
+  
+}
