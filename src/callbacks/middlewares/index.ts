@@ -60,12 +60,14 @@ export namespace Middlewares {
     const itemName = request.params["itemName"];
     const foundList = request.foundList;
 
-    const foundListItem = foundList?.data?.find(
+    const foundPurchaseListItem = foundList?.data?.find(
       (purchaseListItem: iPurchaseListItem) =>
         purchaseListItem.name === itemName
     );
 
-    if (!foundListItem) {
+    request.foundPurchaseListItem = foundPurchaseListItem;
+
+    if (!foundPurchaseListItem) {
       const errorMessage: iMessage = {
         message: "Nenhum item com o nome especificado foi encontrado",
       };

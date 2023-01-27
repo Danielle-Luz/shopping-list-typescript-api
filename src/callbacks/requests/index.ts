@@ -42,6 +42,26 @@ export const createListItem = (request: Request, response: Response) => {
   return response.status(202).send(infoMessage);
 };
 
+export const updateListItem = (request: Request, response: Response) => {
+  const updatedPurchaseListItemData = request.body;
+  const {foundList, foundPurchaseListItem} = request;
+
+  let statusCode;
+  let message;
+
+  if (foundPurchaseListItem) {
+    message = "O item já foi inserido anteriormente na lista.";
+    statusCode = 20;
+  } else {
+    message = "Item inserido na lista com sucesso.";
+    statusCode = 201;
+  }
+
+  const infoMessage: iMessage = { message: message };
+
+  return response.status(202).send(infoMessage);
+};
+
 export const getAllLists = (request: Request, response: Response) => {
   return response.status(200).send(database);
 };
