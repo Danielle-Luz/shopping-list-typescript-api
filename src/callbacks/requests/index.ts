@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { database } from "./../database";
-import { iMessage } from "./../interfaces";
-import { validateId, validateRequestList } from "./validate";
+import { database } from "../../database";
+import { iMessage } from "../../interfaces";
+import { validateRequestList } from "../validate";
 
 export const createList = (request: Request, response: Response) => {
   const listData = request.body;
@@ -33,14 +33,6 @@ export const getAllLists = (request: Request, response: Response) => {
 export const getListById = (request: Request, response: Response) => {
   const searchedListId = Number(request.params["purchaseListId"]);
   try {
-    validateId(searchedListId);
-
-    const foundList = database.find(
-      ({ id: listId }) => listId === searchedListId
-    );
-
-    if (!foundList) throw new Error("Nenhuma lista possui o id especificado");
-
     return response.status(200).send(foundList);
   } catch (error) {
     const errorObject = error as Error;
@@ -52,6 +44,10 @@ export const getListById = (request: Request, response: Response) => {
 };
 
 export const deleteListItem = (request: Request, response: Response) => {
-    const purchaseListId = Number(request.params["purchaseListId"]);
-    const itemName = request.params["itemName"];
-}
+  const purchaseListId = Number(request.params["purchaseListId"]);
+  const itemName = request.params["itemName"];
+
+  try {
+    
+  } catch (error) {}
+};
