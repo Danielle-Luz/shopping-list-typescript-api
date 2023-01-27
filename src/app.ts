@@ -12,7 +12,7 @@ api.use(express.json());
 api.use("/:purchaseListId", Middlewares.validateId);
 api.use("/:purchaseListId", Middlewares.findList);
 
-api.post("/purchaseList", createList);
+api.post("/purchaseList", Middlewares.RequestKeys.validateRequestListKeys, Middlewares.RequestKeys.validateRequestListPropertiesTypes, createList);
 
 api.get("/purchaseList", getAllLists);
 api.get("/purchaseList/:purchaseListId", getListById);

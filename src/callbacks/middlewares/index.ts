@@ -47,13 +47,7 @@ export namespace Middlewares {
     return next();
   };
 
-  const validateRequestListKeys = (
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ) => {
-    const requestList = request.body;
-
+  export namespace RequestKeys {
     const idealPurchaseList: Omit<iPurchaseList, "id"> = {
       listName: "",
       data: [],
@@ -62,23 +56,64 @@ export namespace Middlewares {
     const idealPurchaseListKeys: tPurchaseListKeys[] = Object.keys(
       idealPurchaseList
     ) as tPurchaseListKeys[];
-    const requestListKeys = Object.keys(requestList);
 
-    const hasidealPurchaseListKeys = idealPurchaseListKeys.every((key) => {
-      const hasShoppingKey = requestListKeys.includes(key);
-      const hasSameLength =
-        requestListKeys.length === idealPurchaseListKeys.length;
+    export const validateRequestListKeys = (
+      request: Request,
+      response: Response,
+      next: NextFunction
+    ) => {
+      const requestList = request.body;
+      const requestListKeys = Object.keys(requestList);
 
-      return hasShoppingKey && hasSameLength;
-    });
+      const hasidealPurchaseListKeys = idealPurchaseListKeys.every((key) => {
+        const hasShoppingKey = requestListKeys.includes(key);
+        const hasSameLength =
+          requestListKeys.length === idealPurchaseListKeys.length;
 
-    if (!hasidealPurchaseListKeys) {
-      const errorMessage: iMessage = {
-        message: `O corpo da requisição deve ter as seguintes propriedades: ${idealPurchaseListKeys.join(
-          ", "
-        )}`,
-      };
-      return response.status(400).send(errorMessage);
-    }
-  };
+        return hasShoppingKey && hasSameLength;
+      });
+
+      if (!hasidealPurchaseListKeys) {
+        const errorMessage: iMessage = {
+          message: `O corpo da requisição deve ter as seguintes propriedades: ${idealPurchaseListKeys.join(
+            ", "
+          )}`,
+        };
+        return response.status(400).send(errorMessage);
+      }
+
+      return next();
+    };
+
+    export const validateRequestListPropertiesTypes = (
+      request: Request,
+      response: Response,
+      next: NextFunction
+    ) => {
+      const requestList = request.body;
+
+      const propertiesTypes: string[] = [];
+      let hasSameTypes = true;
+
+      idealPurchaseListKeys.forEach((key) => {
+        const propertyConstructor = idealPurchaseList[key].constructor;
+
+        propertiesTypes.push(propertyConstructor.name.toLowerCase());
+
+        if (propertyConstructor !== requestList[key].constructor)
+          hasSameTypes = false;
+      });
+
+      if (!hasSameTypes) {
+        const errorMessage: iMessage = {
+          message: `As propriedades no corpo da requisição devem ter os seguintes tipos respectivamente: ${propertiesTypes.join(
+            ", "
+          )}`,
+        };
+        return response.status(400).send(errorMessage);
+      }
+
+      return next();
+    };
+  }
 }
