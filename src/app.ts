@@ -6,6 +6,7 @@ import {
   deleteListItem,
   getAllLists,
   getListById,
+  updateListItem,
 } from "./callbacks/requests/index";
 
 const express = require("express");
@@ -15,7 +16,9 @@ api.use(express.json());
 api.use("/purchaseList/:purchaseListId", [Middlewares.validateId, Middlewares.findList]);
 
 api.post("/purchaseList", Middlewares.RequestKeys.validatePurchaseListKeys, Middlewares.RequestKeys.validatePurchaseListPropertiesTypes, createList);
-api.post("/purchaseList/:purchaseListId", Middlewares.findList, Middlewares.RequestKeys.validatePurchaseListItemKeys, Middlewares.RequestKeys.validatePurchaseListItemPropertiesTypes, createListItem);
+api.post("/purchaseList/:purchaseListId", Middlewares.RequestKeys.validatePurchaseListItemKeys, Middlewares.RequestKeys.validatePurchaseListItemPropertiesTypes, createListItem);
+
+api.patch("/purchaseList/:purchaseListId/:itemName", Middlewares.findListItem, Middlewares.RequestKeys.validatePurchaseListItemKeys, Middlewares.RequestKeys.validatePurchaseListItemPropertiesTypes, updateListItem);
 
 api.get("/purchaseList", getAllLists);
 api.get("/purchaseList/:purchaseListId", getListById);

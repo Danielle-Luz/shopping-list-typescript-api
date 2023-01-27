@@ -1,4 +1,4 @@
-import { iPurchaseListItem } from "./../../interfaces";
+import { iPurchaseListItem, tPurchaseListItemKeys } from "./../../interfaces";
 import { Request, Response } from "express";
 import { database } from "../../database";
 import { iMessage } from "../../interfaces";
@@ -44,22 +44,23 @@ export const createListItem = (request: Request, response: Response) => {
 
 export const updateListItem = (request: Request, response: Response) => {
   const updatedPurchaseListItemData = request.body;
-  const {foundList, foundPurchaseListItem} = request;
+  const updatedPurchaseListItemKeys: tPurchaseListItemKeys[] = Object.keys(
+    updatedPurchaseListItemData
+  ) as tPurchaseListItemKeys[];
 
-  let statusCode;
-  let message;
+  let { foundPurchaseListItem } = request;
 
-  if (foundPurchaseListItem) {
-    message = "O item já foi inserido anteriormente na lista.";
-    statusCode = 20;
-  } else {
-    message = "Item inserido na lista com sucesso.";
-    statusCode = 201;
-  }
+  updatedPurchaseListItemKeys.forEach((updatedKey) => {
+    if (foundPurchaseListItem)
+      return (foundPurchaseListItem[updatedKey] =
+        updatedPurchaseListItemData[updatedKey]);
+  });
 
-  const infoMessage: iMessage = { message: message };
+  const infoMessage: iMessage = {
+    message: "Item da lista atualizado com sucesso.",
+  };
 
-  return response.status(202).send(infoMessage);
+  return response.status(200).send(infoMessage);
 };
 
 export const getAllLists = (request: Request, response: Response) => {
