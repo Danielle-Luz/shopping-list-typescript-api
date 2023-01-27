@@ -1,8 +1,8 @@
-import { iMessage } from "./../../interfaces";
+import { iMessage } from "../../interfaces";
 import { NextFunction, Request, Response } from "express";
 import { database } from "../../database";
 
-export namespace middlewares {
+export namespace Middlewares {
   export const validateId = (
     request: Request,
     response: Response,

@@ -1,12 +1,16 @@
+import { Middlewares } from "./callbacks/Middlewares";
 import {
   createList,
   getAllLists,
   getListById,
 } from "./callbacks/requests/index";
+
 const express = require("express");
 const api = express();
 
 api.use(express.json());
+api.use("/:purchaseListId", Middlewares.validateId);
+api.use("/:purchaseListId", Middlewares.findList);
 
 api.post("/purchaseList", createList);
 
