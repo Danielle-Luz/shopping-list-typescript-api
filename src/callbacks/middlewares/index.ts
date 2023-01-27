@@ -82,7 +82,7 @@ export namespace Middlewares {
     };
     const idealPurchaseListItem: iPurchaseListItem = {
       name: "",
-      quantity: 0,
+      quantity: "",
     };
 
     const idealPurchaseListKeys: tPurchaseListKeys[] = Object.keys(

@@ -1,6 +1,6 @@
 export interface iPurchaseListItem {
   name: string;
-  quantity: number;
+  quantity: string;
 }
 
 export interface iPurchaseList {
