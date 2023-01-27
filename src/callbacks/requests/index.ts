@@ -1,4 +1,8 @@
-import { iPurchaseListItem, tPurchaseListItemKeys } from "./../../interfaces";
+import {
+  iPurchaseListItem,
+  tPurchaseListItemKeys,
+  tPurchaseListKeys,
+} from "./../../interfaces";
 import { Request, Response } from "express";
 import { database } from "../../database";
 import { iMessage } from "../../interfaces";
@@ -58,6 +62,26 @@ export const updateListItem = (request: Request, response: Response) => {
 
   const infoMessage: iMessage = {
     message: "Item da lista atualizado com sucesso.",
+  };
+
+  return response.status(200).send(infoMessage);
+};
+
+export const updateList = (request: Request, response: Response) => {
+  const updatedPurchaseListData = request.body;
+  const updatedPurchaseListKeys: tPurchaseListKeys[] = Object.keys(
+    updatedPurchaseListData
+  ) as tPurchaseListKeys[];
+
+  let { foundList } = request;
+
+  updatedPurchaseListKeys.forEach((updatedKey) => {
+    if (foundList)
+      return (foundList[updatedKey] = updatedPurchaseListData[updatedKey]);
+  });
+
+  const infoMessage: iMessage = {
+    message: "Lista atualizada com sucesso.",
   };
 
   return response.status(200).send(infoMessage);

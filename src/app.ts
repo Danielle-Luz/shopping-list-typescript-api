@@ -19,6 +19,7 @@ api.post("/purchaseList", Middlewares.RequestKeys.validatePurchaseListKeys, Midd
 api.post("/purchaseList/:purchaseListId", Middlewares.RequestKeys.validatePurchaseListItemKeys, Middlewares.RequestKeys.validatePurchaseListItemPropertiesTypes, createListItem);
 
 api.patch("/purchaseList/:purchaseListId/:itemName", Middlewares.findListItem, Middlewares.RequestKeys.validatePurchaseListItemKeys, Middlewares.RequestKeys.validatePurchaseListItemPropertiesTypes, updateListItem);
+api.patch("/purchaseList/:purchaseListId", Middlewares.RequestKeys.validatePurchaseListKeys, Middlewares.RequestKeys.validatePurchaseListPropertiesTypes, updateListItem);
 
 api.get("/purchaseList", getAllLists);
 api.get("/purchaseList/:purchaseListId", getListById);
