@@ -146,23 +146,24 @@ export namespace Middlewares {
       );
     };
 
-    export const validateRequestListPropertiesTypes = (
+    export const validateRequestPropertiesTypes = (
       request: Request,
       response: Response,
+      idealRequestKeys: tPurchaseListKeys[] | tPurchaseListItemKeys[],
+      idealRequestObject: any,
       next: NextFunction
     ) => {
-      const requestList = request.body;
+      const { body } = request;
 
       const propertiesTypes: string[] = [];
       let hasSameTypes = true;
 
-      idealPurchaseListKeys.forEach((key) => {
-        const propertyConstructor = idealPurchaseList[key].constructor;
+      idealRequestKeys.forEach((key) => {
+        const propertyConstructor = idealRequestObject[key].constructor;
 
         propertiesTypes.push(propertyConstructor.name.toLowerCase());
 
-        if (propertyConstructor !== requestList[key].constructor)
-          hasSameTypes = false;
+        if (propertyConstructor !== body[key].constructor) hasSameTypes = false;
       });
 
       if (!hasSameTypes) {
@@ -175,6 +176,34 @@ export namespace Middlewares {
       }
 
       return next();
+    };
+
+    export const validatePurchaseListPropertiesTypes = (
+      request: Request,
+      response: Response,
+      next: NextFunction
+    ) => {
+      return validateRequestPropertiesTypes(
+        request,
+        response,
+        idealPurchaseListKeys,
+        idealPurchaseList,
+        next
+      );
+    };
+
+    export const validatePurchaseListItemPropertiesTypes = (
+      request: Request,
+      response: Response,
+      next: NextFunction
+    ) => {
+      return validateRequestPropertiesTypes(
+        request,
+        response,
+        idealPurchaseListItemKeys,
+        idealPurchaseListItem,
+        next
+      );
     };
   }
 }
