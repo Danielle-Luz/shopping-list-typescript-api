@@ -31,16 +31,7 @@ export const getAllLists = (request: Request, response: Response) => {
 };
 
 export const getListById = (request: Request, response: Response) => {
-  const searchedListId = Number(request.params["purchaseListId"]);
-  try {
-    return response.status(200).send(foundList);
-  } catch (error) {
-    const errorObject = error as Error;
-
-    const errorMessage: iMessage = { message: errorObject.message };
-
-    return response.status(404).send(errorMessage);
-  }
+  return response.status(200).send(request.foundList);
 };
 
 export const deleteListItem = (request: Request, response: Response) => {
