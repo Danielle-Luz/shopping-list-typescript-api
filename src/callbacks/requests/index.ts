@@ -16,6 +16,26 @@ export const createList = (request: Request, response: Response) => {
   return response.status(201).send(sucessMessage);
 };
 
+export const createListItem = (request: Request, response: Response) => {
+  const newPurchaseListItemData = request.body;
+  const foundList = request.foundList;
+  const foundListIndex = request.foundListIndex;
+
+  const foundPurchaseListItem = foundList.data.find(({name}) => name == newPurchaseListItemData.name);
+
+  if (foundPurchaseListItem) {
+    foundPurchaseListItem.quantity += 1;
+  } else {
+    foundList.data.push(newPurchaseListItemData);
+  }
+
+  //database[foundListIndex] = foundList;
+
+  const sucessMessage: iMessage = { message: "Item inserido na lista com sucesso." };
+
+  return response.status(201).send(sucessMessage);
+};
+
 export const getAllLists = (request: Request, response: Response) => {
   return response.status(200).send(database);
 };

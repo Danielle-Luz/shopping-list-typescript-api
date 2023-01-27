@@ -110,7 +110,7 @@ export namespace Middlewares {
 
       if (!hasidealRequestKeys) {
         const errorMessage: iMessage = {
-          message: `O corpo da requisição deve ter as seguintes propriedades: ${idealPurchaseListKeys.join(
+          message: `O corpo da requisição deve ter as seguintes propriedades: ${idealRequestKeys.join(
             ", "
           )}`,
         };
@@ -146,7 +146,7 @@ export namespace Middlewares {
       );
     };
 
-    export const validateRequestPropertiesTypes = (
+    const validateRequestPropertiesTypes = (
       request: Request,
       response: Response,
       idealRequestKeys: tPurchaseListKeys[] | tPurchaseListItemKeys[],

@@ -1,6 +1,7 @@
 import { Middlewares } from "./callbacks/Middlewares";
 import {
   createList,
+  createListItem,
   deleteList,
   deleteListItem,
   getAllLists,
@@ -14,7 +15,7 @@ api.use(express.json());
 api.use("/purchaseList/:purchaseListId", [Middlewares.validateId, Middlewares.findList]);
 
 api.post("/purchaseList", Middlewares.RequestKeys.validatePurchaseListKeys, Middlewares.RequestKeys.validatePurchaseListPropertiesTypes, createList);
-api.post("/purchaseList/:purchaseListId");
+api.post("/purchaseList/:purchaseListId", Middlewares.findList, Middlewares.RequestKeys.validatePurchaseListItemKeys, Middlewares.RequestKeys.validatePurchaseListItemPropertiesTypes, createListItem);
 
 api.get("/purchaseList", getAllLists);
 api.get("/purchaseList/:purchaseListId", getListById);
