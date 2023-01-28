@@ -4,7 +4,7 @@ import { iMessage, iPurchaseList, tPurchaseListKeys } from "../../interfaces";
 import { NextFunction, Request, Response } from "express";
 import { database } from "../../database";
 
-export namespace Middlewares {
+export namespace middlewares {
   export const validateId = (
     request: Request,
     response: Response,
@@ -97,7 +97,7 @@ export namespace Middlewares {
     return next();
   };
 
-  export namespace RequestKeys {
+  export namespace requestKeys {
     const idealPurchaseList: Omit<iPurchaseList, "id"> = {
       listName: "",
       data: [],

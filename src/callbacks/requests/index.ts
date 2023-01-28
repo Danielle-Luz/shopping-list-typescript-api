@@ -7,111 +7,120 @@ import { Request, Response } from "express";
 import { database } from "../../database";
 import { iMessage } from "../../interfaces";
 
-export const createList = (request: Request, response: Response) => {
-  const listData = request.body;
+export namespace requests {
+  export namespace listItem {
+    export const createListItem = (request: Request, response: Response) => {
+      const newPurchaseListItemData = request.body;
+      const foundList = request.foundList;
 
-  const nextId = database[database.length - 1]?.id + 1 || 1;
-  const newListItem = { id: nextId, ...listData };
+      const foundPurchaseListItem = foundList.data.find(
+        ({ name }) => name == newPurchaseListItemData.name
+      );
 
-  database.push(newListItem);
+      let statusCode;
+      let message;
 
-  const sucessMessage: iMessage = { message: "Lista inserida com sucesso." };
+      if (foundPurchaseListItem) {
+        message = "O item já foi inserido anteriormente na lista.";
+        statusCode = 202;
+      } else {
+        message = "Item inserido na lista com sucesso.";
+        statusCode = 201;
 
-  return response.status(201).send(sucessMessage);
-};
+        foundList.data.push(newPurchaseListItemData);
+      }
 
-export const createListItem = (request: Request, response: Response) => {
-  const newPurchaseListItemData = request.body;
-  const foundList = request.foundList;
+      const infoMessage: iMessage = { message: message };
 
-  const foundPurchaseListItem = foundList.data.find(
-    ({ name }) => name == newPurchaseListItemData.name
-  );
+      return response.status(202).send(infoMessage);
+    };
 
-  let statusCode;
-  let message;
+    export const updateListItem = (request: Request, response: Response) => {
+      const updatedPurchaseListItemData = request.body;
+      const updatedPurchaseListItemKeys: tPurchaseListItemKeys[] = Object.keys(
+        updatedPurchaseListItemData
+      ) as tPurchaseListItemKeys[];
 
-  if (foundPurchaseListItem) {
-    message = "O item já foi inserido anteriormente na lista.";
-    statusCode = 202;
-  } else {
-    message = "Item inserido na lista com sucesso.";
-    statusCode = 201;
+      let { foundPurchaseListItem } = request;
 
-    foundList.data.push(newPurchaseListItemData);
+      updatedPurchaseListItemKeys.forEach((updatedKey) => {
+        if (foundPurchaseListItem)
+          return (foundPurchaseListItem[updatedKey] =
+            updatedPurchaseListItemData[updatedKey]);
+      });
+
+      const infoMessage: iMessage = {
+        message: "Item da lista atualizado com sucesso.",
+      };
+
+      return response.status(200).send(infoMessage);
+    };
+
+    export const deleteListItem = (request: Request, response: Response) => {
+      const itemName = request.params["itemName"];
+      const foundList = request.foundList;
+      const foundListIndex = request.foundListIndex;
+
+      foundList.data = foundList.data.filter(
+        (purchaseListItem: iPurchaseListItem) =>
+          purchaseListItem.name !== itemName
+      );
+      database[foundListIndex] = foundList;
+
+      return response.status(204).send();
+    };
   }
 
-  const infoMessage: iMessage = { message: message };
+  export namespace list {
+    export const createList = (request: Request, response: Response) => {
+      const listData = request.body;
 
-  return response.status(202).send(infoMessage);
-};
+      const nextId = database[database.length - 1]?.id + 1 || 1;
+      const newListItem = { id: nextId, ...listData };
 
-export const updateListItem = (request: Request, response: Response) => {
-  const updatedPurchaseListItemData = request.body;
-  const updatedPurchaseListItemKeys: tPurchaseListItemKeys[] = Object.keys(
-    updatedPurchaseListItemData
-  ) as tPurchaseListItemKeys[];
+      database.push(newListItem);
 
-  let { foundPurchaseListItem } = request;
+      const sucessMessage: iMessage = {
+        message: "Lista inserida com sucesso.",
+      };
 
-  updatedPurchaseListItemKeys.forEach((updatedKey) => {
-    if (foundPurchaseListItem)
-      return (foundPurchaseListItem[updatedKey] =
-        updatedPurchaseListItemData[updatedKey]);
-  });
+      return response.status(201).send(sucessMessage);
+    };
 
-  const infoMessage: iMessage = {
-    message: "Item da lista atualizado com sucesso.",
-  };
+    export const deleteList = (request: Request, response: Response) => {
+      const foundListIndex = request.foundListIndex;
 
-  return response.status(200).send(infoMessage);
-};
+      database.splice(foundListIndex, 1);
 
-export const updateList = (request: Request, response: Response) => {
-  const updatedPurchaseListData = request.body;
-  const updatedPurchaseListKeys: tPurchaseListKeys[] = Object.keys(
-    updatedPurchaseListData
-  ) as tPurchaseListKeys[];
+      return response.status(204).send();
+    };
 
-  let { foundList } = request;
+    export const updateList = (request: Request, response: Response) => {
+      const updatedPurchaseListData = request.body;
+      const updatedPurchaseListKeys: tPurchaseListKeys[] = Object.keys(
+        updatedPurchaseListData
+      ) as tPurchaseListKeys[];
 
-  updatedPurchaseListKeys.forEach((updatedKey) => {
-    if (foundList)
-      return (foundList[updatedKey] = updatedPurchaseListData[updatedKey]);
-  });
+      let { foundList } = request;
 
-  const infoMessage: iMessage = {
-    message: "Lista atualizada com sucesso.",
-  };
+      updatedPurchaseListKeys.forEach((updatedKey) => {
+        if (foundList)
+          return (foundList[updatedKey] = updatedPurchaseListData[updatedKey]);
+      });
 
-  return response.status(200).send(infoMessage);
-};
+      const infoMessage: iMessage = {
+        message: "Lista atualizada com sucesso.",
+      };
 
-export const getAllLists = (request: Request, response: Response) => {
-  return response.status(200).send(database);
-};
+      return response.status(200).send(infoMessage);
+    };
 
-export const getListById = (request: Request, response: Response) => {
-  return response.status(200).send(request.foundList);
-};
+    export const getAllLists = (request: Request, response: Response) => {
+      return response.status(200).send(database);
+    };
 
-export const deleteListItem = (request: Request, response: Response) => {
-  const itemName = request.params["itemName"];
-  const foundList = request.foundList;
-  const foundListIndex = request.foundListIndex;
-
-  foundList.data = foundList.data.filter(
-    (purchaseListItem: iPurchaseListItem) => purchaseListItem.name !== itemName
-  );
-  database[foundListIndex] = foundList;
-
-  return response.status(204).send();
-};
-
-export const deleteList = (request: Request, response: Response) => {
-  const foundListIndex = request.foundListIndex;
-
-  database.splice(foundListIndex, 1);
-
-  return response.status(204).send();
-};
+    export const getListById = (request: Request, response: Response) => {
+      return response.status(200).send(request.foundList);
+    };
+  }
+}
