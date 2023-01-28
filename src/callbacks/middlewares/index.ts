@@ -124,8 +124,13 @@ export namespace middlewares {
       const requestKeys = Object.keys(body);
 
       let hasidealRequestKeys: boolean;
+      let message: string;
 
       if (request.method !== "PATCH") {
+        message = `O corpo da requisição deve ter as seguintes propriedades: '${idealRequestKeys.join(
+          "', '"
+        )}'`;
+
         hasidealRequestKeys = idealRequestKeys.every((key) => {
           const hasIdealRequestKeys = requestKeys.includes(key);
           const hasSameLength = requestKeys.length === idealRequestKeys.length;
@@ -133,6 +138,17 @@ export namespace middlewares {
           return hasIdealRequestKeys && hasSameLength;
         });
       } else {
+        const isUpdatingAList = idealRequestKeys.includes("listName");
+
+        if (isUpdatingAList) {
+          message =
+            "O corpo da requisição deve conter apenas a seguinte propriedade: 'listName'";
+        } else {
+          message = `O corpo da requisição só pode conter as seguintes propriedades: '${idealRequestKeys.join(
+            "', '"
+          )}'`;
+        }
+
         hasidealRequestKeys = requestKeys.every((key) => {
           const hasIdealRequestKeys = idealRequestKeys.includes(key);
           const hasSmallerLength =
@@ -143,11 +159,7 @@ export namespace middlewares {
       }
 
       if (!hasidealRequestKeys) {
-        const errorMessage: iMessage = {
-          message: `O corpo da requisição deve ter as seguintes propriedades: ${idealRequestKeys.join(
-            ", "
-          )}`,
-        };
+        const errorMessage: iMessage = { message };
         return response.status(400).send(errorMessage);
       }
 

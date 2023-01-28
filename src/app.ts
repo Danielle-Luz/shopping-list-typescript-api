@@ -32,9 +32,9 @@ api.patch(
 );
 api.patch(
   "/purchaseList/:purchaseListId",
+  middlewares.avoidDataPropertyUpdate,
   middlewares.requestKeys.validatePurchaseListKeys,
   middlewares.requestKeys.validatePurchaseListPropertiesTypes,
-  middlewares.avoidDataPropertyUpdate,
   requests.list.updateList
 );
 
