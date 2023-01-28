@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2023-01-28T02:32:13.797Z
+__export_date: 2023-01-28T16:13:14.836Z
 __export_source: insomnia.desktop.app:v2022.7.5
 resources:
   - _id: req_8d6f42d620274d37b04175a726da9d06
@@ -377,7 +377,7 @@ resources:
     _type: request
   - _id: req_99588c06be0d4dab818e4750e22258d3
     parentId: fld_00085bec89ec44f28739f9b394bd309e
-    modified: 1674871437560
+    modified: 1674921932593
     created: 1673544993129
     url: "{{ _.host }}/purchaseList"
     name: Create a list with succes
@@ -395,7 +395,7 @@ resources:
         		},
         		{
         			"name": "maçã",
-        			"teste": "jskj"
+        			"quantity": "3 unidades"
         		},
         		{
         			"name": "mamão",
