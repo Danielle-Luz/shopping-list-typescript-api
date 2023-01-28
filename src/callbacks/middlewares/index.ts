@@ -1,3 +1,4 @@
+import { request } from "http";
 import { iPurchaseListItem, tPurchaseListItemKeys } from "./../../interfaces";
 import { iMessage, iPurchaseList, tPurchaseListKeys } from "../../interfaces";
 import { NextFunction, Request, Response } from "express";
@@ -72,6 +73,25 @@ export namespace Middlewares {
         message: "Nenhum item com o nome especificado foi encontrado",
       };
       return response.status(404).send(errorMessage);
+    }
+
+    return next();
+  };
+
+  export const avoidDataPropertyUpdate = (
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ) => {
+    const { body } = request;
+
+    const containsDataProperty = Object.keys(body).includes("data");
+
+    if (containsDataProperty) {
+      const errorMessage: iMessage = {
+        message: "Apenas a propriedade 'listName' pode ser atualizada.",
+      };
+      return response.status(403).send(errorMessage);
     }
 
     return next();
