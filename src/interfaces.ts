@@ -1,12 +1,12 @@
-export interface iShoppingItem {
+export interface iPurchaseListItem {
   name: string;
-  quantity: number;
+  quantity: string;
 }
 
 export interface iPurchaseList {
   id: number;
   listName: string;
-  data: iShoppingItem[];
+  data: iPurchaseListItem[];
 }
 
 export interface iMessage {
@@ -14,3 +14,4 @@ export interface iMessage {
 }
 
 export type tPurchaseListKeys = "listName" | "data";
+export type tPurchaseListItemKeys = "name" | "quantity";
