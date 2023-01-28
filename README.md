@@ -41,7 +41,7 @@ os dados são persistidos durante a execução do programa.
 - Após a instalação das dependências, a API deve ser executada com o comando:
 
   ```typescript
-  tsnd --cls --rs src/nomeArquivoApi.ts
+  tsnd --cls --rs src/app.ts
   ```
 
 <h2 id="tecnologias">:computer: Tecnologias</h2>
