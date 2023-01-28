@@ -97,6 +97,52 @@ export namespace middlewares {
     return next();
   };
 
+  export const validateListItemsOnDataList = (
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ) => {
+    const { body } = request;
+
+    const listItemWithWrongPropertiesIndex = body?.data?.findIndex(
+      (purchaseListItem: any) => {
+        const rightProperties = ["name", "quantity"];
+        const purchaseListItemKeys = Object.keys(purchaseListItem);
+        const containsOnlyRightProperties = rightProperties.every(
+          (key) =>
+            purchaseListItemKeys.includes(key) &&
+            purchaseListItemKeys.length === rightProperties.length
+        );
+
+        return !containsOnlyRightProperties;
+      }
+    );
+    const propertiesAreAllStrings = body?.data?.every(
+      (purchaseListItem: any) => {
+        const propertiesValues = Object.values(purchaseListItem);
+
+        return propertiesValues.every((value) => typeof value === "string");
+      }
+    );
+
+    if (listItemWithWrongPropertiesIndex !== -1) {
+      const errorMessage: iMessage = {
+        message:
+          "Todos os itens da lista devem conter as propriedades: 'name' e 'quantity'",
+      };
+
+      return response.status(400).send(errorMessage);
+    } else if (!propertiesAreAllStrings) {
+      const errorMessage: iMessage = {
+        message: "Todos os itens da lista devem ser strings",
+      };
+
+      return response.status(400).send(errorMessage);
+    }
+
+    return next();
+  };
+
   export namespace requestKeys {
     const idealPurchaseList: Omit<iPurchaseList, "id"> = {
       listName: "",

@@ -14,6 +14,7 @@ api.post(
   "/purchaseList",
   middlewares.requestKeys.validatePurchaseListKeys,
   middlewares.requestKeys.validatePurchaseListPropertiesTypes,
+  middlewares.validateListItemsOnDataList,
   requests.list.createList
 );
 api.post(
